@@ -31,22 +31,34 @@ namespace Wrapper {
 
 double X,Y,C;
 
-double getPropositionC(double W)
+inline static double getPropositionC(const double W)
 {
     double a=std::sqrt(X*X - W*W);
     double b=std::sqrt(Y*Y - W*W);
     return (a*b)/(a+b);
 }
 
-void solution()
+inline static void solution()
 {
     using namespace Wrapper;
+    out.precision(3);
     int z;
     in>>z;
     while(z--)
     {
-        in>>X>Y>>C;
-        
+        in>>X>>Y>>C;
+        double L=0.;
+        double R=std::min(X,Y);
+        while(R-L>=0.0001)
+        {
+            double Wp=(L+R)/2.;
+            double Cp=getPropositionC(Wp);
+            if(Cp>C)
+                L=Wp;
+            else
+                R=Wp;
+        }
+        out<<std::fixed<<(R+L)/2<<'\n';
     }
 }
 
