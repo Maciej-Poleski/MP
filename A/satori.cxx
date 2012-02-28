@@ -27,14 +27,27 @@ namespace Wrapper {
     std::ostream &out=std::cout;
 }
 #endif
+#include <cmath>
+
+double X,Y,C;
+
+double getPropositionC(double W)
+{
+    double a=std::sqrt(X*X - W*W);
+    double b=std::sqrt(Y*Y - W*W);
+    return (a*b)/(a+b);
+}
 
 void solution()
 {
-    int a;
     using namespace Wrapper;
-    in>>a;
-    out<<"Hello World\n";
-
+    int z;
+    in>>z;
+    while(z--)
+    {
+        in>>X>Y>>C;
+        
+    }
 }
 
 int main(int argc,char**argv)
