@@ -1,0 +1,66 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 1. Zestaw 1}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 1. Zestaw 1)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Tablica nieskończona}
+Rozwiązanie składa się z dwóch częsci:
+\begin{enumerate}
+ \item Znalezienie górnego ograniczenia rozmiaru tablicy
+ \item Klasyczny binary serach w wyznaczonym przedziale
+\end{enumerate}
+W rozwiązaniu zakładam że $\infty$ jest większe od każdej liczby całkowitej oraz że $\infty\geq{\infty}$.
+\subsection*{Faza 1}
+\begin{alltt}
+ Wejście: A - tablica zgodnie z oznaczeniami z zadania
+ Wyjście: m - liczba naturalna taka że \(2n>m\geq{n}\)
+ 
+ int m;
+ for(m=1 ; A[m]\(\neq\infty\) ; m*=2);
+\end{alltt} 
+Najpierw zauważmy że $A[m]=\infty$. Jest to warunek stopu pętli.
+Następnie $m\geq{n}$. Gdyby było inaczej to $A[m]\neq\infty$ a więc nie zaszedłby warunek stopu.
+W każdym kroku pętli m rośnie dwókrotnie oznacza to że jeżeli $A[m]=\infty$ to $A[\frac{m}{2}]\neq\infty$. Czyli $\frac{m}{2}<n$ więc $m<2n$ i w końcu $2n>m\geq{n}$. Oznacza to że algorytm zwraca poprawny wynik pod warunkiem że się zakończy.\\
+Zakończy się dlatego że funkcja wykładnicza $2^k$ jest rosnąca. A $n$ jest skończone.\\
+Na koniec zastanówmy się nad złożonością. $m$ rośnie dwókrotnie przy każdym obiegu pętli. Początkowo $m=1$, a na koniec $m<2n$. Więc złożoność całego algorytmu wynosi $\varTheta(\lg{m})$.
+Funkcja logaryrytm binarny jest rosnąca więc $\lg{m}<\lg{2n}$. Oznacza to że złożoność algorytmu wynosi $O(\lg{2n}) = O(1+\lg{n}) = O(\lg{n})$
+\subsection*{Faza 2}
+Dysponując obliczoną wartością $m$ z fazy 1 natychmiast rozpoczynamy fazę 2.
+\begin{alltt}
+ Wejście: A - tablica zgodnie z oznaczeniami z zadania
+          m - liczba uzyskana z poprzedniej fazy
+          x - poszukiwana zawartość komórki
+ Wyjście: indeks komórki zawierającej x o ile istnieje
+ 
+ return binary_search(A,A+m,x)-A;
+\end{alltt}
+Algorytm \verb|binary_search| został omówiony na wykładzie. Przykładową implementację można odnaleźć w moim rozwiązaniu zadań A i B oraz conajmniej kilku zadaniach z WdP.
+Oczekuję zachowania takiego jak\\
+\verb|std::lower_bound|, czyli pierwszy argument to początek przeszukiwanego przedziału, drugi to koniec przeszukiwanego przedziału, trzeci to poszukiwana wartość. Poszukiwana wartość jeżeli istnieje to jest w tym przedziale ponieważ jest liczbą całkowitą, a zgodnie z założeniem każda liczba całkowita jest mniejsza niż $\infty$ oraz $A[m]=\infty$ a tablica jest posortowana niemalejąco. Wynikiem algorytmu jest pozycja, a więc po odjęciu pozycji początku przedziału uzyskujemy pozycję wewnątrz zadanego przedziału.\\
+Złożoność algorytmu \verb|std::lower_bound| to $O(\lg{m})$. Uwzględniając fazę\\
+pierwszą złożoność obliczeniowa całego rozwiązania to $O(\lg{n})$. $\blacksquare$
+\end{document}
