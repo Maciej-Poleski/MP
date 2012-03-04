@@ -28,36 +28,139 @@
 \newpage
 
 \section{Tablica nieskończona}
-Rozwiązanie składa się z dwóch częsci:
+Rozwiązanie składa się z dwóch części:
 \begin{enumerate}
  \item Znalezienie górnego ograniczenia rozmiaru tablicy
  \item Klasyczny binary serach w wyznaczonym przedziale
 \end{enumerate}
-W rozwiązaniu zakładam że $\infty$ jest większe od każdej liczby całkowitej.
+W rozwiązaniu zakładam że $\infty$ jest większe od każdej liczby całkowitej oraz że $\infty\geq{\infty}$.
 \subsection*{Faza 1}
 \begin{alltt}
  Wejście: A - tablica zgodnie z oznaczeniami z zadania
  Wyjście: m - liczba naturalna taka że \(2n>m\geq{n}\)
  
+ extern int A[];
  int m;
  for(m=1 ; A[m]\(\neq\infty\) ; m*=2);
 \end{alltt} 
 Najpierw zauważmy że $A[m]=\infty$. Jest to warunek stopu pętli.
 Następnie $m\geq{n}$. Gdyby było inaczej to $A[m]\neq\infty$ a więc nie zaszedłby warunek stopu.
-W każdym kroku pętli m rośnie dwókrotnie oznacza to że jeżeli $A[m]=\infty$ to $A[\frac{m}{2}]\neq\infty$. Czyli $\frac{m}{2}<n$ więc $m<2n$ i w końcu $2n>m\geq{n}$. Oznacza to że algorytm zwraca poprawny wynik pod warunkiem że się zakończy.\\
+W każdym kroku pętli $m$ rośnie dwukrotnie oznacza to że jeżeli $A[m]=\infty$ to $A[\frac{m}{2}]\neq\infty$. Czyli $\frac{m}{2}<n$ więc $m<2n$ i w końcu $2n>m\geq{n}$. Oznacza to że algorytm zwraca poprawny wynik pod warunkiem że się zakończy.\\
 Zakończy się dlatego że funkcja wykładnicza $2^k$ jest rosnąca. A $n$ jest skończone.\\
-Na koniec zastanówmy się nad złożonością. $m$ rośnie dwókrotnie przy każdym obiegu pętli. Początkowo $m=1$, a na koniec $m<2n$. Więc złożoność całego algorytmu wynosi $\Theta(\lg{m})$.
-Funkcja logaryrytm binarny jest rosnąca więc $\lg{m}<\lg{2n}$. Oznacza to że złożoność algorytmu wynosi $O(\lg{2n}) = O(1+\lg{n}) = O(\lg{n})$
+Na koniec zastanówmy się nad złożonością. $m$ rośnie dwukrotnie przy każdym obiegu pętli. Początkowo $m=1$, a na koniec $m<2n$. Więc złożoność całego algorytmu wynosi $\varTheta(\lg{m})$.
+Funkcja logarytm binarny jest rosnąca więc $\lg{m}<\lg{2n}$. Oznacza to że złożoność algorytmu wynosi $O(\lg{2n}) = O(1+\lg{n}) = O(\lg{n})$
 \subsection*{Faza 2}
 Dysponując obliczoną wartością $m$ z fazy 1 natychmiast rozpoczynamy fazę 2.
 \begin{alltt}
  Wejście: A - tablica zgodnie z oznaczeniami z zadania
           m - liczba uzyskana z poprzedniej fazy
-          x - poszukiwana zawartość komórki zgodnie z treścią zadania
- Wyjście: indeks komórki zawierającej x o ile taka komórka istnieje
+          x - poszukiwana zawartość komórki
+ Wyjście: indeks komórki zawierającej x o ile istnieje
+ 
+ extern int A[];
+ extern int m;
+ extern int x;
  
  return binary_search(A,A+m,x)-A;
 \end{alltt}
-Algorytm binary_search został omówiony na wykładzie. Przykładową implementację można odnaleźć w moim rozwiązaniu zadań A i B oraz conajmniej kilku zadaniach z WdP.
-Oczekuję zachowania takiego jak std::lower_bound, czyli pierwszy argument to początek przeszukiwanego przedziału, drugi to koniec przeszukiwanego przedziału, trzeci to poszukiwana wartość. Poszukiwana wartość jeżeli istnieje to jest w tym przedziale ponieważ jest liczbą całkowitą a zgodnie z założeniem każda liczba całkowita jest mniejsza niż \infty oraz A[m]=\infty a tablica jest posortowana niemalejąco.
+Algorytm \verb|binary_search| został omówiony na wykładzie. Przykładową implementację można odnaleźć w moim rozwiązaniu zadań A i B oraz co najmniej kilku zadaniach z WdP.
+Oczekuję zachowania takiego jak\\
+\verb|std::lower_bound|, czyli pierwszy argument to początek przeszukiwanego przedziału, drugi to koniec przeszukiwanego przedziału, trzeci to poszukiwana wartość. Poszukiwana wartość jeżeli istnieje to jest w tym przedziale ponieważ jest liczbą całkowitą, a zgodnie z założeniem każda liczba całkowita jest mniejsza niż $\infty$ oraz $A[m]=\infty$ (bo $m\geq{n}$) a tablica jest posortowana niemalejąco. Wynikiem algorytmu jest pozycja, a więc po odjęciu pozycji początku przedziału uzyskujemy pozycję wewnątrz zadanego przedziału.\\
+Złożoność algorytmu \verb|std::lower_bound| to $O(\lg{m})$. Uwzględniając fazę\\
+pierwszą złożoność obliczeniowa całego rozwiązania to $O(\lg{n})$. $\blacksquare$
+
+\section{Cosinus}
+Zakładam że typ \verb|double| jest w stanie przechować liczbę z dokładnością do $k$ miejsca po przecinku. Nie jestem pewny na czym polega problem w zadaniu. Funkcję \verb|sincos| ma zaimplementowana każda jednostka zmiennoprzecinkowa (FPU), jednak zakładając że mamy tą funkcję właściwie nie ma zadania (zadanie A już rozwiązałem). Dlatego dodatkowo przedstawię implementację funkcji szacującej wartość funkcji $\cos$ w oparciu o szereg Taylora wykorzystując metodę binary search.\\
+W rozwiązaniu wykorzystuję własność funkcji $x^2-\cos(x*\pi)$ - jest ona ściśle rosnąca i ma dokładnie jedno miejsce zerowe w zadanym przedziale.
+
+\begin{alltt}
+ Wejście: k - oczekiwana dokładność zgodnie z treścią zadania
+ Wyjście: x - rozwiązanie zadanego równania
+ 
+ extern int k;
+ double stopCondition = \(0.1\sp{k}\);
+ 
+ double value(double x)
+ \{
+     return x*x - cos(x*pi);
+ \}
+ 
+ double solution()
+ \{
+     double l=0.0;
+     double r=1.0;
+     while(r-l >= stopCondition)
+     \{
+         double c=(l+r)/2;
+         (value(c)>0 ? r : l) = c;
+     \}
+     return (l+r)/2;
+ \}
+\end{alltt}
+Funkcja \verb|value(x)| oblicza wartość zadanej funkcji w punkcie $x$. W tym celu wykorzystuje funkcję pomocniczą \verb|cos| oraz stałą $\pi$.\\
+Funkcja \verb|solution| szacuje wartość rozwiązania z dokładnością do $k$ miejsc po przecinku przy użyciu funkcji pomocniczej \verb|value|.\\
+Dodatkowo implementacja funkcji \verb|cos|:
+
+\begin{alltt}
+ extern double stopCondition;
+ 
+ double cos(double x)
+ \{
+     double result = 1;
+     double xp = 1;
+     int ip = 1;
+     for(int i=1 ;; ++i)
+     \{
+         double oldResult = result;
+         xp *= x*x;
+         ip *= (2*i-1)*(2*i);
+         result = (i\%2 ? -1 : 1) * xp/ip;
+         if(abs(result-oldResult) < stopCondition)
+             break;
+     \}
+     return result;
+ \}
+\end{alltt}
+Wadą tej implementacji jest pojawianie się dużych liczb w zmiennej \verb|ip|. Dlatego jest to tylko teoretyczny przykład metody szacowania wartości funkcji $\cos$.\\
+Jeżeli nie mamy do dyspozycji stałej $\pi$ to możemy ją oszacować przy użyciu tej funkcji rozwiązując równanie $\cos(2x)=0$ (modyfikacji wymaga wtedy tylko funkcja \verb|value|).\\
+W praktyce na każdym komputerze funkcja \verb|cos| jest realizowana sprzętowo i zwraca rezultat tak dokładny jak tylko można go zapisać w typie zmiennoprzecinkowym obsługiwanym na danej platformie. Podobnie ze stałą $\pi$.\\
+Jeżeli jednak z różnych powodów chcemy uzyskać rozwiązanie znacznie bardziej precyzyjne niż umożliwia do architektura komputera, to implementując typy \verb|int| oraz \verb|double| jako typy o nieograniczonej precyzji (z dokładnością do $k$ miejsc po przecinku) mamy możliwość uzyskania rozwiązania problemu przy użyciu przedstawionej implementacji. $\blacksquare$
+
+\section{Deski}
+Właściwie jest to zadanie B.
+\begin{alltt}
+ Wejście: n - ilość desek
+          D - tablica z długościami desek
+          z - minimalna akceptowana liczba fragmentów
+ Wyjście: największa możliwa długość spełniająca warunki zadania
+ 
+ extern int n;
+ extern int D[];
+ extern int z;
+ 
+ int count(int z)
+ {
+     int r = 0;
+     for(int i=0 ; i<n ; ++i)
+         r += D[i]/z;
+     return r;
+ }
+ 
+ int binary_search()
+ {
+     int l = 1;
+     int r = *(std::max_element(D, D+n));
+     while(l < r)
+     {
+         int m = (l+r+1)/2;
+         if(z <= count(m))
+             l = m;
+         else
+             r = m-1;
+     }
+     return l;
+ }
+\end{alltt}
+
+
 \end{document}
