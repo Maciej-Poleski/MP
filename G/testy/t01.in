@@ -1,0 +1,23 @@
+1
+21
+NEW Jeden Przemek
+BACK Jeden Kubus
+FRONT Jeden Grzesiu
+PRINT Jeden
+NEW Dwa Tosia
+BACK Dwa Jasiu
+FRONT Dwa Kamil
+REVERSE Dwa
+PRINT Dwa
+NEW Trzy Mikolaj
+FRONT Trzy Monika
+PRINT Trzy
+DELFRONT Cztery Trzy
+BACK Cztery Zosia
+PRINT Cztery
+UNION Trzy Cztery
+PRINT Trzy
+DELBACK Trzy Cztery
+PRINT Cztery
+DELFRONT Pięć Cztery
+PRINT Pięć
