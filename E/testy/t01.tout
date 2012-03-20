@@ -1,14 +1,11 @@
-"Jeden":
-Grzesiu<-Przemek<-Kubus
-"Dwa":
-Jasiu<-Tosia<-Kamil
-"Trzy":
-Monika<-Mikolaj
-"Cztery":
-Monika<-Zosia
-"Trzy":
-Mikolaj<-Monika<-Zosia
-"Cztery":
-Zosia
-"Pięć":
-Zosia
+8 4 9 5 2 6 10 11 7 3 1 
+ERROR
+1 2 4 8 5 9 3 6 7 10 11 
+ERROR
+1 
+1 
+ERROR
+2 1 3 
+4 2 5 1 6 3 7 
+4 2 5 1 3 
+2 1 4 3 5 
