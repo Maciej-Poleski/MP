@@ -1,23 +1,28 @@
-1
-21
-NEW Jeden Przemek
-BACK Jeden Kubus
-FRONT Jeden Grzesiu
-PRINT Jeden
-NEW Dwa Tosia
-BACK Dwa Jasiu
-FRONT Dwa Kamil
-REVERSE Dwa
-PRINT Dwa
-NEW Trzy Mikolaj
-FRONT Trzy Monika
-PRINT Trzy
-DELFRONT Cztery Trzy
-BACK Cztery Zosia
-PRINT Cztery
-UNION Trzy Cztery
-PRINT Trzy
-DELBACK Trzy Cztery
-PRINT Cztery
-DELFRONT Pięć Cztery
-PRINT Pięć
+4
+9 1
+(+(<xxx)(>xx(<xx))(-(>xx)))
+1 3 4 17 18 1 1 10 5
+0 -5
+3 3
+(+x(>xx))
+1 1 1
+0 5
+1 5
+2 5
+9 11
+(>(>(-(+xx))(+x))(<(+xx)(>xx))(+(-(-x))x))
+5 4 2 1 1 0 1 2 2
+0 -10
+6 0
+7 5
+0 -2
+7 -1
+0 -10
+6 0
+7 5
+0 -2
+7 -1
+5 2
+1 0
+x
+5
