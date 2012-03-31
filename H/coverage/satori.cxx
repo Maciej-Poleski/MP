@@ -76,44 +76,61 @@ namespace
 {
 using namespace Wrapper;
 struct Entry {
-    uint64_t key;
+    union {
+        char stringKey[8];
+        uint64_t key;
+    };
     int value;
 
     Entry() : key(0ULL) {}
-    Entry(uint64_t key, int value) : key(key), value(value) {}
+    Entry(const char *stringKey, int value) : value(value) {
+        this->stringKey[0]=stringKey[0];
+        this->stringKey[1]=stringKey[1];
+        this->stringKey[2]=stringKey[2];
+        this->stringKey[3]=stringKey[3];
+        this->stringKey[4]=stringKey[4];
+        this->stringKey[5]=stringKey[5];
+        this->stringKey[6]=stringKey[6];
+        this->stringKey[7]=stringKey[7];
+    }
 };
 
-Entry *hashTable;
-uint32_t tableSize;
-uint32_t entryCount;
-uint32_t deletedEntryCount;
-uint32_t mask;
+static Entry *hashTable;
+static uint32_t tableSize;
+static uint32_t entryCount;
+static uint32_t deletedEntryCount;
 
-uint64_t asNumber(const char *string)
-{
-    return *reinterpret_cast<const uint64_t *>(string);
-}
-#define PHI 0.6180339887498948482045868343656381177203091798057628
-const long double phi = PHI;
-const long double phi2 = phi *phi;
+static uint_fast32_t hashTableSizes[] = {1009, 2011, 4001, 8009, 16001, 32003, 64007, 128021, 256019, 512009, 1024021, 2048003, 4000037, 8000009, 16000057, 32000011, 64000031, 128000003, 256000001, 512000009};
+static uint_fast8_t currentPrime = 0;
 
-static inline uint32_t hash1(uint_fast32_t m, uint64_t k)
+static inline uint32_t hash1(const char *string)
 {
-    return static_cast<uint32_t>(m * (k * phi - static_cast<uint64_t>(k * phi)));
+    uint_fast32_t result = 31;
+    for(int i = 0; i < 8; ++i, ++string)
+        result = result * 131 + *string;
+    return result%tableSize;
 }
 
-static inline uint32_t hash2(uint_fast32_t m, uint64_t k)
+static inline uint32_t hash2(const char *string)
 {
-    return static_cast<uint32_t>(m * (k * phi2 - static_cast<uint64_t>(k * phi2))) | 1;
+    uint_fast32_t result = 13;
+    for(int i = 0; i < 8; ++i, ++string)
+        result = result * 67 + *string;
+    return result;
+}
+
+static inline uint32_t iterateInTable(uint32_t position, uint32_t distance)
+{
+    return (position + distance) % tableSize;
 }
 
 static void insert_unchecked(const Entry &entry)
 {
-    for(uint_fast32_t i = hash1(tableSize, entry.key),
-            d = hash2(tableSize, entry.key);
+    for(uint_fast32_t i = hash1(entry.stringKey),
+            d = hash2(entry.stringKey);
             ;
-            i = (i + d)&mask) {
-        if(hashTable[i].key == 0UL) {
+            i = iterateInTable(i, d)) {
+        if(hashTable[i].key == 0ULL) {
             hashTable[i] = entry;
             ++entryCount;
             break;
@@ -125,11 +142,9 @@ static void insert_unchecked(const Entry &entry)
     }
 }
 
-static void resize(uint32_t newSize)
+static void resize()
 {
-    check(__builtin_popcount(newSize) == 1);
-    check(newSize >= tableSize);
-    check(newSize == tableSize * 2);
+    uint32_t newSize = hashTableSizes[currentPrime];
     Entry *newHashTable = new Entry[newSize];
     Entry *i = hashTable, *e = hashTable + tableSize;
     Entry *oldHashTable = hashTable;
@@ -137,10 +152,9 @@ static void resize(uint32_t newSize)
     tableSize = newSize;
     entryCount = 0;
     deletedEntryCount = 0;
-    mask = (mask << 1) | 1;
     for(; i != e; ++i) {
         if(i->key != 0ULL && i->key != (~(0ULL)))
-            insert_unchecked(Entry(i->key, i->value));
+            insert_unchecked(Entry(i->stringKey, i->value));
     }
     delete [] oldHashTable;
 
@@ -148,10 +162,12 @@ static void resize(uint32_t newSize)
 
 static inline void checkSize()
 {
-    if(entryCount * 2 > tableSize)
-        resize(tableSize * 2);
+    if(entryCount * 2 > tableSize) {
+        ++currentPrime;
+        resize();
+    }
     if(deletedEntryCount * 4 > tableSize)
-        resize(tableSize);
+        resize();
 }
 
 static void inline insert(const Entry &entry)
@@ -160,15 +176,16 @@ static void inline insert(const Entry &entry)
     insert_unchecked(entry);
 }
 
-static inline std::pair<Entry *, Entry *> find(uint64_t key)
+static inline std::pair<Entry *, Entry *> find(const char* stringKey)
 {
     Entry *first = 0;
-    for(uint_fast32_t i = hash1(tableSize, key), d = hash2(tableSize, key);
+    Entry cmp(stringKey,0);
+    for(uint_fast32_t i = hash1(stringKey), d = hash2(stringKey);
             ;
-            i = (i + d)&mask) {
+            i = iterateInTable(i, d)) {
         if(first == 0 && hashTable[i].key == (~(0ULL)))
             first = &hashTable[i];
-        else if(hashTable[i].key == key) {
+        else if(hashTable[i].key == cmp.key) {
             return std::make_pair(first, &hashTable[i]);
         }
         if(hashTable[i].key == 0ULL)
@@ -176,13 +193,14 @@ static inline std::pair<Entry *, Entry *> find(uint64_t key)
     }
 }
 
-static inline Entry *deleteKey(uint64_t key)
+static inline Entry *deleteKey(const char * stringKey)
 {
     checkSize();
-    for(uint_fast32_t i = hash1(tableSize, key), d = hash2(tableSize, key);
+    Entry cmp(stringKey,0);
+    for(uint_fast32_t i = hash1(stringKey), d = hash2(stringKey);
             ;
-            i = (i + d)&mask) {
-        if(hashTable[i].key == key) {
+            i = iterateInTable(i,d)) {
+        if(hashTable[i].key == cmp.key) {
             hashTable[i].key = ~0ULL;
             ++deletedEntryCount;
             return &hashTable[i];
@@ -203,13 +221,11 @@ static inline void clear()
 
 inline static void solution()
 {
-    //tableSize = 4;
-    tableSize = 1024;
+    currentPrime=0;
+    tableSize = hashTableSizes[currentPrime];
     hashTable = new Entry[tableSize];
     entryCount = 0;
     deletedEntryCount = 0;
-    //mask = 3;
-    mask = 1023;
     std::tr1::uint_fast32_t z;
     in >> z;
     while(z--) {
@@ -223,26 +239,26 @@ inline static void solution()
             in >> command >> stringKey;
             if(*command == 'I') {
                 in >> value;
-                std::pair<Entry *, Entry *> entry = find(asNumber(stringKey));
+                std::pair<Entry *, Entry *> entry = find(stringKey);
                 if(entry.second)
                     entry.second->value += value;
                 else {
                     if(entry.first == 0)
-                        insert(Entry(asNumber(stringKey), value));
+                        insert(Entry(stringKey, value));
                     else {
-                        entry.first->key = asNumber(stringKey);
+                        entry.first->key = Entry(stringKey,0).key;
                         entry.first->value = value;
                     }
                 }
             } else if(*command == 'D') {
-                Entry *entry = deleteKey(asNumber(stringKey));
+                Entry *entry = deleteKey(stringKey);
                 if(entry)
                     out << entry->value << '\n';
                 else
                     out << "ERROR\n";
             } else {
                 check(*command == 'F');
-                Entry *entry = find(asNumber(stringKey)).second;
+                Entry *entry = find(stringKey).second;
                 if(entry)
                     out << entry->value << '\n';
                 else
