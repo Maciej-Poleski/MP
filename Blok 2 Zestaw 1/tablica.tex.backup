@@ -1,0 +1,47 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 1. Zestaw 1}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 2. Zestaw 1)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Drzewa nizane}
+\lstset{language=C++}
+\begin{lstlisting}
+TreeNode *next=nullptr;
+
+void makeLink(TreeNode *node)
+{
+    if(node==nullptr)
+        return;
+    makeLink(node->right);
+    node->next=next;
+    next=node;
+    makeLink(node->left);
+}
+\end{lstlisting}
+
+\end{document}
