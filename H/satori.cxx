@@ -77,47 +77,61 @@ namespace
 using namespace Wrapper;
 struct Entry {
     uint64_t key;
+    static const uint64_t deletedKeyMark;
+    static const uint64_t emptyKeyMark;
     int value;
 
-    Entry() : key(0ULL) {}
+    Entry() : key(emptyKeyMark) {}
     Entry(uint64_t key, int value) : key(key), value(value) {}
 };
 
-Entry *hashTable;
-uint32_t tableSize;
-uint32_t entryCount;
-uint32_t deletedEntryCount;
-uint32_t mask;
+static Entry *hashTable;
+static uint32_t tableSize;
+static uint32_t entryCount;
+static uint32_t deletedEntryCount;
+static uint32_t mask;
+static uint_fast8_t bits;
+const uint64_t Entry::emptyKeyMark=static_cast<uint64_t>(0U);
+const uint64_t Entry::deletedKeyMark=~Entry::emptyKeyMark;
 
-uint64_t asNumber(const char *string)
+static inline uint64_t asNumber(const char *string)
 {
-    return *reinterpret_cast<const uint64_t *>(string);
-}
-#define PHI 0.6180339887498948482045868343656381177203091798057628
-const long double phi = PHI;
-const long double phi2 = phi *phi;
-
-static inline uint32_t hash1(uint_fast32_t m, uint64_t k)
-{
-    return static_cast<uint32_t>(m * (k * phi - static_cast<uint64_t>(k * phi)));
+    return *reinterpret_cast<const uint64_t*>(string);
 }
 
-static inline uint32_t hash2(uint_fast32_t m, uint64_t k)
+static inline uint32_t fitInDWord(uint64_t what)
 {
-    return static_cast<uint32_t>(m * (k * phi2 - static_cast<uint64_t>(k * phi2))) | 1;
+    const char * string=reinterpret_cast<const char *>(&what);
+    const uint32_t result=((*reinterpret_cast<const uint32_t *>(string+4))>>1)^(*reinterpret_cast<const uint32_t *>(string));
+    return result;
+}
+
+const uint32_t s1=2654435769U;
+const uint32_t s2=1739953610U;
+
+static inline uint32_t hash1(uint64_t k)
+{
+    uint64_t x=s1*fitInDWord(k);
+    return (x&0xffffffffU)>>(32-bits);
+}
+
+static inline uint32_t hash2(uint64_t k)
+{
+    uint64_t x=s2*fitInDWord(k);
+    return ((x&0xffffffffU)>>(32-bits))|1;
 }
 
 static void insert_unchecked(const Entry &entry)
 {
-    for(uint_fast32_t i = hash1(tableSize, entry.key),
-            d = hash2(tableSize, entry.key);
+    for(uint_fast32_t i = hash1(entry.key),
+            d = hash2(entry.key);
             ;
             i = (i + d)&mask) {
-        if(hashTable[i].key == 0UL) {
+        if(hashTable[i].key == Entry::emptyKeyMark) {
             hashTable[i] = entry;
             ++entryCount;
             break;
-        } else if(hashTable[i].key == (~(0ULL))) {
+        } else if(hashTable[i].key == Entry::deletedKeyMark) {
             hashTable[i] = entry;
             --deletedEntryCount;
             break;
@@ -129,17 +143,20 @@ static void resize(uint32_t newSize)
 {
     check(__builtin_popcount(newSize) == 1);
     check(newSize >= tableSize);
-    check(newSize == tableSize * 2);
     Entry *newHashTable = new Entry[newSize];
     Entry *i = hashTable, *e = hashTable + tableSize;
     Entry *oldHashTable = hashTable;
+    if(newSize>tableSize)
+    {
+        mask = (mask << 1) | 1;
+        ++bits;
+    }
     hashTable = newHashTable;
     tableSize = newSize;
     entryCount = 0;
     deletedEntryCount = 0;
-    mask = (mask << 1) | 1;
     for(; i != e; ++i) {
-        if(i->key != 0ULL && i->key != (~(0ULL)))
+        if(i->key != Entry::emptyKeyMark && i->key != Entry::deletedKeyMark)
             insert_unchecked(Entry(i->key, i->value));
     }
     delete [] oldHashTable;
@@ -148,7 +165,7 @@ static void resize(uint32_t newSize)
 
 static inline void checkSize()
 {
-    if(entryCount * 2 > tableSize)
+    if(entryCount * 3 > tableSize*2)
         resize(tableSize * 2);
     if(deletedEntryCount * 4 > tableSize)
         resize(tableSize);
@@ -163,31 +180,31 @@ static void inline insert(const Entry &entry)
 static inline std::pair<Entry *, Entry *> find(uint64_t key)
 {
     Entry *first = 0;
-    for(uint_fast32_t i = hash1(tableSize, key), d = hash2(tableSize, key);
+    for(uint_fast32_t i = hash1(key), d = hash2(key);
             ;
             i = (i + d)&mask) {
-        if(first == 0 && hashTable[i].key == (~(0ULL)))
-            first = &hashTable[i];
+        if(hashTable[i].key == Entry::emptyKeyMark)
+            return std::make_pair(first, static_cast<Entry *>(0));
         else if(hashTable[i].key == key) {
             return std::make_pair(first, &hashTable[i]);
         }
-        if(hashTable[i].key == 0ULL)
-            return std::make_pair(first, static_cast<Entry *>(0));
+        else if(first == 0 && hashTable[i].key == Entry::deletedKeyMark)
+            first = &hashTable[i];
     }
 }
 
 static inline Entry *deleteKey(uint64_t key)
 {
     checkSize();
-    for(uint_fast32_t i = hash1(tableSize, key), d = hash2(tableSize, key);
+    for(uint_fast32_t i = hash1(key), d = hash2(key);
             ;
             i = (i + d)&mask) {
         if(hashTable[i].key == key) {
-            hashTable[i].key = ~0ULL;
+            hashTable[i].key = Entry::deletedKeyMark;
             ++deletedEntryCount;
             return &hashTable[i];
         }
-        if(hashTable[i].key == 0ULL)
+        if(hashTable[i].key == Entry::emptyKeyMark)
             return 0;
     }
 }
@@ -197,7 +214,7 @@ static inline void clear()
     entryCount = 0;
     deletedEntryCount = 0;
     for(Entry *i = hashTable, *e = hashTable + tableSize; i != e; ++i)
-        i->key = 0ULL;
+        i->key = Entry::emptyKeyMark;
 }
 
 
@@ -205,6 +222,7 @@ inline static void solution()
 {
     //tableSize = 4;
     tableSize = 1024;
+    bits=10;
     hashTable = new Entry[tableSize];
     entryCount = 0;
     deletedEntryCount = 0;
@@ -232,6 +250,7 @@ inline static void solution()
                     else {
                         entry.first->key = asNumber(stringKey);
                         entry.first->value = value;
+                        --deletedEntryCount;
                     }
                 }
             } else if(*command == 'D') {
