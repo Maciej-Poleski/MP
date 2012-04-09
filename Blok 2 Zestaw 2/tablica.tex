@@ -1,0 +1,62 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 2. Zestaw 2}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 2. Zestaw 2)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Błędne funkcje}
+\subsection{a}
+Mamy gwarancję wystąpienia kolizji (gdy w tablicy jest co najmniej jedne element). W efekcie czego tylko druga funkcja odpowiada za rozrzucanie elementów co i tak jest utrudnione, ponieważ poszukiwania zawsze rozpoczynają się od tego samego miejsca.
+\subsection{b}
+Mamy szansę na uniknięcie kolizji, jednak w sytuacji gdy kolizja wystąpi zaczyna się prawdziwe piekło. Prawie na pewno następna próba również da kolizję ponieważ każda iteracja podczas wyszukiwania przesuwa się o tyle samo. Jeżeli więc wystąpi kolizja na samym początku, to czeka nas przeglądanie wszystkich zajętych miejsc nim znajdziemy jakieś wolne.
+\subsection{c}
+Gwarancja kolizji połączona z najgorszym możliwym rozwiązywaniem kolizji. Za każdym razem przeglądamy tablicę tak jakby była listą. Umieszczenie elementu wymaga przeglądnięcia całej. Odszukanie istniejącego asymptotycznie tyle samo.
+\subsection{d}
+Jeżeli wystąpi kolizja, to nie mamy szans na jej rozwiązanie. Wynik 0 najprawdopodobniej spowoduje zapętlenie się algorytmu.
+\subsection{e}
+Podczas próby wstawiania elementu do tablicy mamy szansę na wykorzystanie jedynie części pól. W skrajnych sytuacjach możemy zapętlić się (gdy jest dużo miejsca, ale niedostępnego dla nas).
+\subsection{f}
+Jeżeli pierwsza zwróci 0 to zapętlamy się. Bardzo słabe rozwiązywanie kolizji. Jeżeli wystąpi kolizja na pierwszej funkcji haszującej, to możemy spodziewać się dokładnie takich samych kolizji jak dla wcześniejszego elementu.
+\subsection{g}
+Bardzo słabe rozwiązywanie kolizji. I do tego zapętlanie się. Tablica będzie mocno wypełniona na początku, słabo na końcu (przy większych rozmiarach). Zapętlanie bierze się z możliwości otrzymania 0 z drugiej funkcji haszującej.
+\section{Kolejka dwustronna}
+\subsection*{Struktura danych}
+Trzecie podejście do opisu bardzo prostej idei. Trzeci stos będzie służył do kopiowania zawartości jednego stosu w odwrotnej kolejności na drugi. Pozostałe dwa stosy będą podzielone na trzy części. Od dna: część z elementami usuniętymi, część z elementami zreplikowanymi i część z elementami nowymi. Jedne ze stosów będzie reprezentował początek kolejki a drugi koniec. Musimy dodatkowo pamiętać jak wygląda struktura tych stosów (da się to zrobić np przy pomocy 6 zmiennych). Najprostsze jest umieszczenie elementów w kolejce - poprostu wrzucamy element na odpowiedni stos (będzie to element ,,nowy''). W przypadku usuwania elementów mogą wystąpić trzy przypadki:
+\begin{itemize}
+ \item Usuwamy element nowy - po prostu zdejmujemy z odpowiedniego stosu.
+ \item Usuwamy element zreplikowany - usuwamy z odpowiedniego stosu, dodatkowo zwiększamy wysokość stosu elementów ,,usuniętych'' na drugim stosie (takie elementy zawsze są na dnie).
+ \item Próbujemy usunąć element ,,usunięty'' lub stos jest pusty. Upewniamy się że nasz stos jest pusty (usuwając ewentualne elementy ,,usunięte'') następnie replikujemy elementy ,,nowe'' z drugiego stosu na nasz (przy użyciu stosu pomocniczego) (na drugim stosie nie ma już elementów zreplikowanych). Oznaczamy wszystkie elementy nowe z drugiego stosu jako zreplikowany (operacja na zmiennej), podobnie wszystkie elementy które pojawiły sie na naszym stosie oznaczamy jako zreplikowane. Przy okazji usuwamy elementy ,,usunięte'' z drugiego stosu.
+\end{itemize}
+\subsection*{Analiza}
+Prześledźmy ,,życie'' obiektu na naszej kolejce. Możliwe są dwa scenariusze:
+\begin{itemize}
+ \item Wkładamy element po czym usuwamy go (gdy jest elementem ,,nowym''). Koszt: 2 (włożenie i usunięcie z tego samego stosu)
+ \item Wkładamy element, ale usuwamy go już po replikacji. Koszt 6: (włożenie 1, replikacja 3, usunięcie ,,zreplikowanego'' 1, usunięcie ,,usuniętego'' 1)
+\end{itemize}
+Widać że czas zamortyzowany jest stały (obsługa każdego obiektu jest ograniczona przez stałą). Możemy teraz przejść do dowodu formalnego. Dowód nie będzie precyzyjny, dlatego wykorzystam metodę księgowania (na koniec księgowy będzie bogaty, ale to nie przeszkadza). Zgaduję, że każda operacja umieszczania w kolejce ma koszt 7, natomiast usuwania 0. W rzeczywistości umieszczanie ma koszt 1, stąd za każdy element księgowy zyskuje 6 na poczet dalszych operacji. Ponieważ cały cykl ,,życia'' ma koszt co najwyżej 6, to i usuwanie ma koszt rzeczywisty co najwyżej 6, oraz możemy usunąć tylko element który wcześniej wstawiliśmy, księgowy może w dowolnej chwili zdjąć dowolny element nie musząc zaciągać kredytu. (dla każdego elementu w kolejce księgowy trzyma 6, na poczet usunięcia tego elementu co na pewno wystarczy).
+
+\end{document}
