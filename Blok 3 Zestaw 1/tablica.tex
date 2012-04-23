@@ -1,0 +1,64 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 3. Zestaw 1}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 3. Zestaw 1)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Cykl z krawędzią}
+Załóżmy że krawędź \verb|e| prowadzi z \verb|v| do \verb|w|. Przeszukam graf w poszukiwaniu jakiejkolwiek ścieżki z \verb|w| do \verb|v|. Jeżeli znajdę jakąś, to wiedząc że istnieje krawędź \verb|e| znajdę również cykl zawierającą tą krawędź.
+\begin{alltt}
+struct Node
+\{
+    bool visited=false;
+    /* Container<Node*> */ edges;
+    
+    //...
+\}
+bool search(Node *w, const Node &v)
+\{
+    if(*w==v)
+    \{
+        std::cout<<*w<<' ';
+        return true;
+    \}
+    if(w->visited)
+        return false;
+    w->visited=true;
+    for(Node *next : w.edges)
+    \{
+        if(search(next,v))
+        \{
+            std::cout<<*w<<' ';
+            return true;
+        \}
+    \}
+    return false;
+\}
+\end{alltt}
+Zakładam że istnieje zdefiniowany sposób wypisywania węzłów na wyjście. Funkcję wywołujemy \verb|search(&w,v)|. Jeżeli zwróci prawdę, to znaczy że cykl został znaleziony i wypisany od tyłu. Jeżeli to przeszkadza, to można dodatkowo użyć stosu (również systemowego).
+
+\end{document}

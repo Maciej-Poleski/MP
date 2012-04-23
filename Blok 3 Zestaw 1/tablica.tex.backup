@@ -1,0 +1,54 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 3. Zestaw 1}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 3. Zestaw 1)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Cykl z krawędzią}
+Załóżmy że krawędź \verb|e| prowadzi z \verb|v| do \verb|w|. Przeszukam graf w poszukiwaniu jakiejkolwiek ścieżki z \verb|w| do \verb|v|. Jeżeli znajdę jakąś, to wiedząc że istnieje krawędź \verb|e| znajdę również cykl zawierającą tą krawędź.
+\begin{alltt}
+bool search(const Node &w, const Node &v)
+\{
+    if(w.visited)
+        return false;
+    w.visited=true;
+    if(w==v)
+        return true;
+    for(const Node &next : w.edges)
+    \{
+        if(search(next,v))
+        \{
+            std::cout<<w<<' ';
+            return true;
+        \}
+    \}
+    return false;
+\}
+\end{alltt}
+
+
+\end{document}
