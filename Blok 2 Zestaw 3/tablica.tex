@@ -1,0 +1,79 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 2. Zestaw 3}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 2. Zestaw 3)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Ścieżki}
+Przedstawię funkcję \verb|relax| którą można zastosować w standardowych algorytmach typu Dijkstra.
+\begin{alltt}
+ struct Edge
+ \{
+     bool isRed;
+     int w;  // waga
+     int v;  // wierzchołek docelowy (reprezentacja kursorowa)
+      ...
+ \};
+ struct Distance
+ \{
+     int withRed;
+     int withoutRed;
+ \};
+ Distance *distance;
+ 
+ bool relax(int v, Edge e)
+ \{
+     if(e.isRed)
+     \{
+         if(distance[e.v].withRed>distance[v].withoutRed+e.w)
+         \{
+             distance[e.v].withRed=distance[v].withoutRed+e.w;
+             return true;
+         \}
+         else
+             return false;
+     \}
+     else
+     \{
+         bool result=false;
+         if(distance[e.v].withoutRed>distance[v].withoutRed+e.w)
+         \{
+             distance[e.v].withoutRed=distance[v].withoutRed+e.w;
+             result=true;
+         \}
+         if(distance[e.v].withRed>distance[v].withRed+e.w)
+         \{
+             distance[e.v].withRed=distance[v].withRed+e.w;
+             result=true;
+         \}
+         return result;
+     \}
+ \}
+\end{alltt}
+Każdy element tablicy \verb|distance| odpowiada wierzchołkowi o danym numerze. Zakładam, że początkowo wszystkie odległości to $\infty$. Rozwiązanie problemu to minimum z wartości pól w strukturze \verb|Distance| odpowiadającej wybranemu wierzchołkowi docelowemu po zakończeniu algorytmu.
+
+\end{document}

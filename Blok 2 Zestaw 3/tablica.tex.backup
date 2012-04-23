@@ -1,0 +1,62 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 2. Zestaw 2}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 2. Zestaw 2)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Ścieżki}
+Przedstawię funkcję \verb|relax| którą można zastosować w standardowym algorytmie typu Dijkstra.
+\begin{alltt}
+ struct Edge
+ \{
+     bool isRed;
+     int w;  // waga
+     int v;  // wierzchołek docelowy (reprezentacja kursorowa)
+      ...
+ \};
+ struct Distance
+ \{
+     int withRed;
+     int withoutRed;
+ \};
+ Distance *distance;
+ 
+ bool relax(int v, Edge e)
+ \{
+     if(e.isRed)
+     \{
+         ;
+     \}
+     else
+     \{
+         ;
+     \}
+ \}
+\end{alltt}
+Każdy element tablicy \verb|distance| odpowiada wierzchołkowi o danym numerze. Zakładam, że początkowo wszystkie odległości to $\infty$. Rozwiązanie problemu to minimum z wartości pól w strukturze \verb|Distance| odpowiadającej wybranemu wierzchołkowi docelowemu.
+
+\end{document}
