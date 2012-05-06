@@ -1,0 +1,57 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 3. Zestaw 2}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 3. Zestaw 2)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Kiepske sortowanie}
+Złożoność obliczeniowa nie zależy od danych (tylko od ich wielkości). Oznaczmy $n=b-a$, a przez $f(n)$ koszt wykonania funkcji dla danych wielkości $n$. Rozgałęzienie w linii 4 zależy tylko od $n$, w linii 10 koszt rozgałęzienia jest stały. Jeżeli rozgałęzienie nie nastąpi, to samo sprawdzenie warunku jest kosztem stałym. Mamy więc dwie możliwości: dla $n\leq2$ mamy $\Theta(1)$, a dla $n\geq3$ koszt linii 5 jest stały, a w liniach 6, 7 i 8 przedziały mają długość $n\frac{2}{3}$ czyli koszt: $$f(n)=3f\left(n\frac{2}{3}\right)$$ Tą rekursje można dość łatwo rozwiązać. Wynik jest postaci $3^k$ gdzie $k$ jest najmniejszą liczbą całkowitą spełniającą nierówność: $$n\left(\frac{2}{3}\right)^k\leq2$$ Po prostych przekształceniach $$k\geq\log_\frac{2}{3}\frac{2}{n}$$ czyli $$k=\bigg\lceil\log_\frac{2}{3}\frac{2}{n}\bigg\rceil$$ Czyli złożoność obliczeniowa wynosi $$\Theta\left(3^{\log_\frac{3}{2}n}\right)=\Theta\left(n^{log_\frac{3}{2}3}\right)\approx\Theta\left(n^{2,71}\right)$$
+
+\section{Udziwnione wyszukiwanie binarne}
+\begin{enumerate}
+ \item Funkcja będzie przeszukiwać liniowo tablicę od najmniejszych do największych indeksów.
+ \item Funkcja nie działa $x$ może być mniejsze niż $a$, w efekcie zadziała linia 5 poszerzając przedział (zamiast skracając)
+ \item Funkcja będzie nieoptymalna. Złożoność $O\left(log_\frac{10}{9}n\right)$
+ \item Funkcja będzie bardzo nieoptymalna (liniowa). Przeszukiwanie będzie odbywać się w dwóch fazach: skakanie od końca co 10 elementów w stronę początku, następnie przeszukiwanie liniowe przedziału długości co najwyżej 10 od najmniejszych indeksów do największych.
+\end{enumerate}
+
+
+\section{Generator testów}
+Prześledźmy bieg wydarzeń w sytuacji gdy w pierwszej linii wybierzemy najmniejszy element tablicy (silnie mniejszy od każdego innego). W drugiej linii najmniejszy element zostanie przeniesione na początek. W pętli while pierwsza wewnętrzna pętla zakończy się natychmiast. Druga pętla wewnętrzna przejdzie całą tablicę i zatrzyma się na pierwszym elemencie (ponieważ wybrany element jest silnie mniejszy od każdego innego, ta pętla zatrzyma się dopiero na nim samym). Właśnie został dokonany nieoptymalny podział na zadanie puste i prawie pełne. Podczas generowania testów należy zwrócić uwagę na zaokrąglenie wyniku dzielenia w pierwszej linii \verb|Sort|.
+\begin{alltt}
+ void generator(int *T, int l, int p)
+ \{
+     static int source=0
+     int v=(l+p)/2;
+     T[v]=source++;
+     if(v>l) generator(T,l,v);
+     if(v+1<p) generator(T,v+1,p);
+ \}
+\end{alltt}
+Tą funkcję należy wywołać dokładnie tak samo jak funkcję \verb|Sort|.
+
+\end{document}
