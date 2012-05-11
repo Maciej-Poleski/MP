@@ -1,0 +1,75 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 3. Zestaw 3}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 3. Zestaw 3)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Scalanie kilku tablic}
+Tablice zostaną umieszczone na kopcu typu minimum. Dane wejściowe są w \verb|input[m]|. Zakładam że dla każdej tablicy wejściowej mam swobodny dostęp do jej początku i końca oraz że możemy porównać dowolne dwa elementy z dowolnych dwóch tablic wejściowych.
+\begin{alltt}
+template<typename T>
+struct HeapEntry
+\{
+    T *iterator;
+    T *end;
+    
+    bool operator<(const HeapEntry &o) const
+    \{
+        return *iterator<*(o.iterator);
+    \}
+\};
+
+template<typename T>
+T* solution()
+\{
+    Heap<HeapEntry<T>> heap;
+    T* result=new T[n];
+    T* resultIterator=result;
+    for(auto array : input)
+    \{
+        heap.push({array.begin, array.end});
+    \}
+    while(!heap.isEmpty())
+    \{
+        auto entry=heap.pop();
+        *resultIterator++=*(entry.iterator)++;
+        if(entry.iterator!=entry.end)
+        \{
+            heap.push(entry);
+        \}
+    \}
+    return result;
+\}
+\end{alltt}
+\verb|T| jest typem elementów w tablicach wejściowych. Algorytm można zoptymalizować modyfikując kopiec - pozwalając na modyfikacje elementów na kopcu (ponieważ elementy w tablicach są posortowane jest to kwestia wykonania \verb|downheap| po usunięciu pierwszego elementu z tablicy).
+
+\section{Równanie rekurencyjne}
+Po podstawieniu do wzoru otrzymujemy:
+$$d=\log_{\sqrt{n}}\sqrt{n}=1$$
+$$T(n)=\Theta(n\log{n})$$
+
+\end{document}
