@@ -1,0 +1,456 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>LCOV - app.info - /home/evil/Studia/Przedmioty/MP/O/coverage/satori.cxx</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">home/evil/Studia/Przedmioty/MP/O/coverage</a> - satori.cxx<span style="font-size: 80%;"> (source / <a href="satori.cxx.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">app.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">92</td>
+            <td class="headerCovTableEntry">102</td>
+            <td class="headerCovTableEntryHi">90.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2012-05-11</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryHi">92.9 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">69</td>
+            <td class="headerCovTableEntry">94</td>
+            <td class="headerCovTableEntryLo">73.4 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : //Maciej Poleski</a>
+<span class="lineNum">       2 </span>                :            : #ifdef DEBUG
+<span class="lineNum">       3 </span>                :            : #include &lt;iostream&gt;
+<span class="lineNum">       4 </span>                :            : #include &lt;fstream&gt;
+<span class="lineNum">       5 </span>                :            : #include &lt;cstdlib&gt;
+<span class="lineNum">       6 </span>                :            : #include &lt;cassert&gt;
+<span class="lineNum">       7 </span>                :            : namespace
+<span class="lineNum">       8 </span>                :            : {
+<span class="lineNum">       9 </span>                :            : namespace Wrapper
+<span class="lineNum">      10 </span>                :            : {
+<span class="lineNum">      11 </span>                :            : std::ifstream in;
+<span class="lineNum">      12 </span>                :            : std::ofstream out;
+<span class="lineNum">      13 </span>                :            : }
+<span class="lineNum">      14 </span>                :            : void init(int argc, char **argv)
+<span class="lineNum">      15 </span>                :            : {
+<span class="lineNum">      16 </span>                :            :     if(argc != 3) {
+<span class="lineNum">      17 </span>                :            :         std::cerr &lt;&lt; &quot;Potrzeba dokładnie dwóch argumentów\n&quot;;
+<span class="lineNum">      18 </span>                :            :         std::abort();
+<span class="lineNum">      19 </span>                :            :     }
+<span class="lineNum">      20 </span>                :            :     Wrapper::in.open(argv[1]);
+<span class="lineNum">      21 </span>                :            :     Wrapper::out.open(argv[2]);
+<span class="lineNum">      22 </span>                :            : }
+<span class="lineNum">      23 </span>                :            : }
+<span class="lineNum">      24 </span>                :            : #define check(x) assert(x)
+<span class="lineNum">      25 </span>                :            : #else
+<span class="lineNum">      26 </span>                :            : #ifndef NDEBUG
+<span class="lineNum">      27 </span>                :            : #define NDEBUG
+<span class="lineNum">      28 </span>                :            : #endif
+<span class="lineNum">      29 </span>                :            : #define check(x)
+<span class="lineNum">      30 </span>                :            : #include &lt;iostream&gt;
+<span class="lineNum">      31 </span>                :            : namespace
+<span class="lineNum">      32 </span>                :            : {
+<span class="lineNum">      33 </span>                :            : namespace Wrapper
+<span class="lineNum">      34 </span>                :            : {
+<span class="lineNum">      35 </span>                :            : std::istream &amp;in = std::cin;
+<span class="lineNum">      36 </span>                :            : std::ostream &amp;out = std::cout;
+<span class="lineNum">      37 </span>                :            : }
+<span class="lineNum">      38 </span>                :            : }
+<span class="lineNum">      39 </span>                :            : #endif
+<span class="lineNum">      40 </span>                :            : 
+<span class="lineNum">      41 </span>                :            : #include &lt;tr1/cstdint&gt;
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :            : namespace
+<span class="lineNum">      44 </span>                :            : {
+<span class="lineNum">      45 </span>                :            : namespace Wrapper
+<span class="lineNum">      46 </span>                :            : {
+<span class="lineNum">      47 </span>                :            : typedef std::tr1::uint_fast64_t uint_fast64_t;
+<span class="lineNum">      48 </span>                :            : typedef std::tr1::uint_fast32_t uint_fast32_t;
+<span class="lineNum">      49 </span>                :            : typedef std::tr1::uint_fast16_t uint_fast16_t;
+<span class="lineNum">      50 </span>                :            : typedef std::tr1::uint_fast8_t uint_fast8_t;
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :            : typedef std::tr1::uint64_t uint64_t;
+<span class="lineNum">      53 </span>                :            : typedef std::tr1::uint32_t uint32_t;
+<span class="lineNum">      54 </span>                :            : typedef std::tr1::uint16_t uint16_t;
+<span class="lineNum">      55 </span>                :            : typedef std::tr1::uint8_t uint8_t;
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            : typedef std::tr1::int_fast64_t int_fast64_t;
+<span class="lineNum">      58 </span>                :            : typedef std::tr1::int_fast32_t int_fast32_t;
+<span class="lineNum">      59 </span>                :            : typedef std::tr1::int_fast16_t int_fast16_t;
+<span class="lineNum">      60 </span>                :            : typedef std::tr1::int_fast8_t int_fast8_t;
+<span class="lineNum">      61 </span>                :            : 
+<span class="lineNum">      62 </span>                :            : typedef std::tr1::int64_t int64_t;
+<span class="lineNum">      63 </span>                :            : typedef std::tr1::int32_t int32_t;
+<span class="lineNum">      64 </span>                :            : typedef std::tr1::int16_t int16_t;
+<span class="lineNum">      65 </span>                :            : typedef std::tr1::int8_t int8_t;
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            : typedef std::size_t size_t;
+<span class="lineNum">      68 </span>                :            : }
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :            : }
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            : #include &lt;string&gt;
+<span class="lineNum">      73 </span>                :            : #include &lt;algorithm&gt;
+<span class="lineNum">      74 </span>                :            : #include &lt;limits&gt;
+<span class="lineNum">      75 </span>                :            : #include &lt;locale&gt;
+<span class="lineNum">      76 </span>                :            : #include &lt;cstring&gt;
+<span class="lineNum">      77 </span>                :            : #include &lt;utility&gt;
+<span class="lineNum">      78 </span>                :            : #include &lt;cstdlib&gt;
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            : namespace
+<span class="lineNum">      81 </span>                :            : {
+<span class="lineNum">      82 </span>                :            : using namespace Wrapper;
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :            : template&lt;typename T&gt;
+<span class="lineNum">      85 </span>                :            : class Stack
+<span class="lineNum">      86 </span>                :            : {
+<span class="lineNum">      87 </span>                :            : public:
+<span class="lineNum">      88 </span>                :            :     Stack() : _arraySize(0) {}
+<span class="lineNum">      89 </span>                :            :     Stack(uint32_t size) : _arraySize(size) {
+<span class="lineNum">      90 </span>                :            :         if(size != 0) {
+<span class="lineNum">      91 </span>                :            :             _array = _top = new T[size];
+<span class="lineNum">      92 </span>                :            :         }
+<span class="lineNum">      93 </span>                :            :     }
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :            :     ~Stack() {
+<span class="lineNum">      96 </span>                :            :         if(_arraySize != 0)
+<span class="lineNum">      97 </span>                :            :             delete [] _array;
+<span class="lineNum">      98 </span>                :            :     }
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :            :     void push(T o) {
+<span class="lineNum">     101 </span>                :            :         if(_arraySize == 0)
+<span class="lineNum">     102 </span>                :            :             resize(1);
+<span class="lineNum">     103 </span>                :            :         else if(size() == _arraySize)
+<span class="lineNum">     104 </span>                :            :             resize(_arraySize * 2);
+<span class="lineNum">     105 </span>                :            :         *_top++ = o;
+<span class="lineNum">     106 </span>                :            :     }
+<span class="lineNum">     107 </span>                :            : 
+<span class="lineNum">     108 </span>                :            :     T pop() {
+<span class="lineNum">     109 </span>                :            :         T result = *--_top;
+<span class="lineNum">     110 </span>                :            :         if(size() * 4 &lt; _arraySize) {
+<span class="lineNum">     111 </span>                :            :             try {
+<span class="lineNum">     112 </span>                :            :                 resize(_arraySize / 2);
+<span class="lineNum">     113 </span>                :            :             } catch(std::bad_alloc) {
+<span class="lineNum">     114 </span>                :            :                 // ignore
+<span class="lineNum">     115 </span>                :            :             }
+<span class="lineNum">     116 </span>                :            :         }
+<span class="lineNum">     117 </span>                :            :         return result;
+<span class="lineNum">     118 </span>                :            :     }
+<span class="lineNum">     119 </span>                :            :     T &amp;top() {
+<span class="lineNum">     120 </span>                :            :         return *(_top - 1);
+<span class="lineNum">     121 </span>                :            :     }
+<span class="lineNum">     122 </span>                :            :     bool isEmpty() const {
+<span class="lineNum">     123 </span>                :            :         return (_arraySize == 0) || (_array == _top);
+<span class="lineNum">     124 </span>                :            :     }
+<span class="lineNum">     125 </span>                :            :     void clear() {
+<span class="lineNum">     126 </span>                :            :         if(_arraySize != 0) {
+<span class="lineNum">     127 </span>                :            :             _arraySize = 0;
+<span class="lineNum">     128 </span>                :            :             delete [] _array;
+<span class="lineNum">     129 </span>                :            :         }
+<span class="lineNum">     130 </span>                :            :     }
+<span class="lineNum">     131 </span>                :            :     uint32_t size() const {
+<span class="lineNum">     132 </span>                :            :         return _arraySize == 0 ? 0 : _top - _array;
+<span class="lineNum">     133 </span>                :            :     }
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>                :            : private:
+<span class="lineNum">     136 </span>                :            :     uint32_t _arraySize;
+<span class="lineNum">     137 </span>                :            :     T *_array;
+<span class="lineNum">     138 </span>                :            :     T *_top;
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :            : private:
+<span class="lineNum">     141 </span>                :            :     void resize(uint32_t newArraySize);
+<span class="lineNum">     142 </span>                :            : };
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>                :            : template&lt;typename T&gt;
+<span class="lineNum">     145 </span>                :            : void Stack&lt;T&gt;::resize(uint32_t newArraySize)
+<span class="lineNum">     146 </span>                :            : {
+<span class="lineNum">     147 </span>                :            :     if(newArraySize == 0) {
+<span class="lineNum">     148 </span>                :            :         this-&gt;clear();
+<span class="lineNum">     149 </span>                :            :     } else {
+<span class="lineNum">     150 </span>                :            :         T *newArray = new T[newArraySize];
+<span class="lineNum">     151 </span>                :            :         T *i = newArray;
+<span class="lineNum">     152 </span>                :            :         if(this-&gt;_arraySize != 0) {
+<span class="lineNum">     153 </span>                :            :             for(T *iterator = this-&gt;_array; iterator != this-&gt;_top; ++iterator) {
+<span class="lineNum">     154 </span>                :            :                 *i++ = *iterator;
+<span class="lineNum">     155 </span>                :            :             }
+<span class="lineNum">     156 </span>                :            :             delete [] this-&gt;_array;
+<span class="lineNum">     157 </span>                :            :         }
+<span class="lineNum">     158 </span>                :            :         this-&gt;_array = newArray;
+<span class="lineNum">     159 </span>                :            :         this-&gt;_top = i;
+<span class="lineNum">     160 </span>                :            :         this-&gt;_arraySize = newArraySize;
+<span class="lineNum">     161 </span>                :            :     }
+<span class="lineNum">     162 </span>                :            : }
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>                :            : /**
+<span class="lineNum">     165 </span>                :            :  * Wymagania:
+<span class="lineNum">     166 </span>                :            :  * DefaultConstructible&lt;T&gt;
+<span class="lineNum">     167 </span>                :            :  * CopyConstructible&lt;T&gt;
+<span class="lineNum">     168 </span>                :            :  * CopyAssignable&lt;T&gt;
+<span class="lineNum">     169 </span>                :            :  */
+<span class="lineNum">     170 </span>                :            : template&lt;typename T, typename Compare = std::less&lt;T&gt; &gt;
+<span class="lineNum">     171 </span>                :            : class Heap
+<span class="lineNum">     172 </span>                :            : {
+<a name="173"><span class="lineNum">     173 </span>                :            : public:</a>
+<span class="lineNum">     174 </span>                :            :     Heap(Compare cmp = Compare()) : _tree(NULL), _size(0), _capacity(0), _cmp(cmp) {}
+<a name="175"><span class="lineNum">     175 </span>                :<span class="lineCov">          1 :     Heap(std::size_t capacity, Compare cmp = Compare()) :</span></a>
+<span class="lineNum">     176 </span>        [<span class="branchCov" title="Branch 2 was taken 6260004 times"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">    6260005 :         _tree(new T[capacity]), _size(0), _capacity(capacity), _cmp(cmp) {}</span>
+<span class="lineNum">     177 </span>                :<span class="lineCov">          1 :     ~Heap() {</span>
+<span class="lineNum">     178 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         delete [] _tree;</span>
+<span class="lineNum">     179 </span>                :<span class="lineCov">          1 :     }</span>
+<a name="180"><span class="lineNum">     180 </span>                :            : </a>
+<span class="lineNum">     181 </span>                :            :     void push(const T &amp;o);
+<span class="lineNum">     182 </span>                :<span class="lineCov">    4551000 :     T top() const {</span>
+<span class="lineNum">     183 </span>                :<span class="lineCov">    4551000 :         return _tree[0];</span>
+<a name="184"><span class="lineNum">     184 </span>                :            :     }</a>
+<span class="lineNum">     185 </span>                :            :     T pop();
+<span class="lineNum">     186 </span>                :<span class="lineCov">    4551000 :     bool isEmpty() const {</span>
+<span class="lineNum">     187 </span>                :<span class="lineCov">    4551000 :         return _size == 0;</span>
+<span class="lineNum">     188 </span>                :            :     }
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :            : private:
+<span class="lineNum">     191 </span>                :            :     void upheap(std::size_t index);
+<span class="lineNum">     192 </span>                :            :     void downheap(std::size_t index);
+<span class="lineNum">     193 </span>                :            :     void resize(std::size_t newCapacity);
+<span class="lineNum">     194 </span>                :            : 
+<span class="lineNum">     195 </span>                :            : private:
+<span class="lineNum">     196 </span>                :            :     T *_tree;
+<span class="lineNum">     197 </span>                :            :     std::size_t _size;
+<span class="lineNum">     198 </span>                :            :     std::size_t _capacity;
+<span class="lineNum">     199 </span>                :            :     Compare _cmp;
+<span class="lineNum">     200 </span>                :            : };
+<a name="201"><span class="lineNum">     201 </span>                :            : </a>
+<span class="lineNum">     202 </span>                :            : template&lt;typename T, typename Compare&gt;
+<span class="lineNum">     203 </span>                :<span class="lineCov">    6204918 : void Heap&lt;T, Compare&gt;::push(const T &amp;o)</span>
+<span class="lineNum">     204 </span>                :            : {
+<span class="lineNum">     205 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6204918 times"> + </span>]:<span class="lineCov">    6204918 :     if(_capacity == 0)</span>
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 :         resize(1);</span>
+<span class="lineNum">     207 </span>                :            :     check(_tree != NULL);
+<span class="lineNum">     208 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6204918 times"> + </span>]:<span class="lineCov">    6204918 :     if(_size == _capacity)</span>
+<span class="lineNum">     209 </span>                :<span class="lineNoCov">          0 :         resize(_capacity * 2);</span>
+<span class="lineNum">     210 </span>                :            :     check(_size &lt; _capacity);
+<span class="lineNum">     211 </span>                :<span class="lineCov">    6204918 :     _tree[_size] = o;</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">    6204918 :     ++_size;</span>
+<span class="lineNum">     213 </span>                :<span class="lineCov">    6204918 :     upheap(_size - 1);</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">    6204918 : }</span>
+<a name="215"><span class="lineNum">     215 </span>                :            : </a>
+<span class="lineNum">     216 </span>                :            : template&lt;typename T, typename Compare&gt;
+<span class="lineNum">     217 </span>                :<span class="lineCov">    4551000 : T Heap&lt;T, Compare&gt;::pop()</span>
+<span class="lineNum">     218 </span>                :            : {
+<span class="lineNum">     219 </span>                :<span class="lineCov">    4551000 :     T result = top();</span>
+<span class="lineNum">     220 </span>                :<span class="lineCov">    4551000 :     --_size;</span>
+<span class="lineNum">     221 </span>        [<span class="branchCov" title="Branch 0 was taken 4550999 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">    4551000 :     if(_size != 0) {</span>
+<span class="lineNum">     222 </span>                :<span class="lineCov">    4550999 :         _tree[0] = _tree[_size];</span>
+<span class="lineNum">     223 </span>                :<span class="lineCov">    4550999 :         downheap(0);</span>
+<span class="lineNum">     224 </span>                :            :     }
+<span class="lineNum">     225 </span>                :            :     //if(_size * 4 &lt; _capacity) {
+<span class="lineNum">     226 </span>                :            :     //    resize(_capacity / 2);
+<span class="lineNum">     227 </span>                :            :     //}
+<span class="lineNum">     228 </span>                :<span class="lineCov">    4551000 :     return result;</span>
+<span class="lineNum">     229 </span>                :            : }
+<a name="230"><span class="lineNum">     230 </span>                :            : </a>
+<span class="lineNum">     231 </span>                :            : template&lt;typename T, typename Compare&gt;
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 : void Heap&lt;T, Compare&gt;::resize(std::size_t newCapacity)</span>
+<span class="lineNum">     233 </span>                :            : {
+<span class="lineNum">     234 </span>        [<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     T *newTree = new T[newCapacity];</span>
+<span class="lineNum">     235 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for(std::size_t i = 0; i &lt; _size; ++i) {</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :         newTree[i] = _tree[i];</span>
+<span class="lineNum">     237 </span>                :            :     }
+<span class="lineNum">     238 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     delete [] _tree;</span>
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 :     _capacity = newCapacity;</span>
+<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :     _tree = newTree;</span>
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="242"><span class="lineNum">     242 </span>                :            : </a>
+<span class="lineNum">     243 </span>                :            : template&lt;typename T, typename Compare&gt;
+<span class="lineNum">     244 </span>                :<span class="lineCov">    6204918 : void Heap&lt;T, Compare&gt;::upheap(std::size_t index)</span>
+<span class="lineNum">     245 </span>                :            : {
+<span class="lineNum">     246 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 6204916 times"> + </span>]:<span class="lineCov">    6204918 :     if(index == 0) {</span>
+<span class="lineNum">     247 </span>                :<span class="lineCov">          2 :         return;</span>
+<span class="lineNum">     248 </span>                :            :     }
+<span class="lineNum">     249 </span>        [<span class="branchCov" title="Branch 1 was taken 1512016 times"> + </span><span class="branchCov" title="Branch 2 was taken 4692900 times"> + </span>]:<span class="lineCov">    6204916 :     if(!_cmp(_tree[index], _tree[(index - 1) / 2])) {</span>
+<span class="lineNum">     250 </span>                :<span class="lineCov">    1512016 :         return;</span>
+<span class="lineNum">     251 </span>                :            :     }
+<span class="lineNum">     252 </span>                :<span class="lineCov">    4692900 :     T temp = _tree[index];</span>
+<span class="lineNum">     253 </span>[<span class="branchCov" title="Branch 0 was taken 69882987 times"> + </span><span class="branchCov" title="Branch 1 was taken 2332249 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 67522336 times"> + </span><span class="branchCov" title="Branch 4 was taken 2360651 times"> + </span>]:<span class="lineCov">   72215236 :     while(index &gt; 0 &amp;&amp; _cmp(temp, _tree[(index - 1) / 2])) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 67522336 times"> + </span><span class="branchCov" title="Branch 6 was taken 4692900 times"> + </span>]
+<span class="lineNum">     254 </span>                :<span class="lineCov">   67522336 :         _tree[index] = _tree[(index - 1) / 2];</span>
+<span class="lineNum">     255 </span>                :<span class="lineCov">   67522336 :         index = (index - 1) / 2;</span>
+<span class="lineNum">     256 </span>                :            :     }
+<span class="lineNum">     257 </span>                :<span class="lineCov">    6204918 :     _tree[index] = temp;</span>
+<span class="lineNum">     258 </span>                :            : }
+<a name="259"><span class="lineNum">     259 </span>                :            : </a>
+<span class="lineNum">     260 </span>                :            : template&lt;typename T, typename Compare&gt;
+<span class="lineNum">     261 </span>                :<span class="lineCov">    4550999 : void Heap&lt;T, Compare&gt;::downheap(std::size_t index)</span>
+<span class="lineNum">     262 </span>                :            : {
+<span class="lineNum">     263 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4550999 times"> + </span>]:<span class="lineCov">    4550999 :     if(index &gt;= _size / 2) {</span>
+<span class="lineNum">     264 </span>                :<span class="lineCov">    4550999 :         return;</span>
+<span class="lineNum">     265 </span>                :            :     }
+<span class="lineNum">     266 </span>                :<span class="lineCov">    4550999 :     T temp = _tree[index];</span>
+<span class="lineNum">     267 </span>        [<span class="branchCov" title="Branch 0 was taken 85786250 times"> + </span><span class="branchCov" title="Branch 1 was taken 2768090 times"> + </span>]:<span class="lineCov">   88554340 :     while(index &lt; _size / 2) {</span>
+<span class="lineNum">     268 </span>                :<span class="lineCov">   85786250 :         std::size_t selectedIndex = index * 2 + 1;</span>
+<span class="lineNum">     269 </span>[<span class="branchCov" title="Branch 0 was taken 84828121 times"> + </span><span class="branchCov" title="Branch 1 was taken 958129 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 42279334 times"> + </span><span class="branchCov" title="Branch 4 was taken 42548787 times"> + </span>]:<span class="lineCov">   85786250 :         if(selectedIndex + 1 &lt; _size &amp;&amp;</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 5 was taken 42279334 times"> + </span><span class="branchCov" title="Branch 6 was taken 43506916 times"> + </span>]
+<span class="lineNum">     270 </span>                :            :                 _cmp(_tree[selectedIndex + 1], _tree[selectedIndex])) {
+<span class="lineNum">     271 </span>                :<span class="lineCov">   42279334 :             ++selectedIndex;</span>
+<span class="lineNum">     272 </span>                :            :         }
+<span class="lineNum">     273 </span>        [<span class="branchCov" title="Branch 1 was taken 1782909 times"> + </span><span class="branchCov" title="Branch 2 was taken 84003341 times"> + </span>]:<span class="lineCov">   85786250 :         if(_cmp(temp, _tree[selectedIndex])) {</span>
+<span class="lineNum">     274 </span>                :<span class="lineCov">    1782909 :             break;</span>
+<span class="lineNum">     275 </span>                :            :         } else {
+<span class="lineNum">     276 </span>                :<span class="lineCov">   84003341 :             _tree[index] = _tree[selectedIndex];</span>
+<span class="lineNum">     277 </span>                :<span class="lineCov">   84003341 :             index = selectedIndex;</span>
+<span class="lineNum">     278 </span>                :            :         }
+<span class="lineNum">     279 </span>                :            :     }
+<span class="lineNum">     280 </span>                :<span class="lineCov">    4550999 :     _tree[index] = temp;</span>
+<span class="lineNum">     281 </span>                :            : }
+<span class="lineNum">     282 </span>                :            : 
+<span class="lineNum">     283 </span>                :            : const size_t maxSize = 2500;
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>                :            : uint32_t H[maxSize + 2][maxSize + 2];
+<span class="lineNum">     286 </span>                :            : bool visited[maxSize + 2][maxSize + 2];
+<span class="lineNum">     287 </span>                :            : uint_fast16_t n, m;
+<span class="lineNum">     288 </span>                :            : uint32_t maxSolution;
+<span class="lineNum">     289 </span>                :            : uint_fast16_t k, l, x, y;
+<a name="290"><span class="lineNum">     290 </span>                :            : </a>
+<span class="lineNum">     291 </span>                :            : struct Comparator {
+<span class="lineNum">     292 </span>                :<span class="lineCov">  246702274 :     bool operator()(const std::pair&lt;uint16_t, uint16_t&gt; &amp;lhs,</span>
+<span class="lineNum">     293 </span>                :            :                     const std::pair&lt;uint16_t, uint16_t&gt; &amp;rhs) const {
+<span class="lineNum">     294 </span>                :<span class="lineCov">  246702274 :         return H[lhs.first][lhs.second] &lt; H[rhs.first][rhs.second];</span>
+<span class="lineNum">     295 </span>                :            :     }
+<a name="296"><span class="lineNum">     296 </span>                :            : };</a>
+<span class="lineNum">     297 </span>                :            : 
+<span class="lineNum">     298 </span>                :<span class="lineCov">          1 : inline static void solution()</span>
+<span class="lineNum">     299 </span>                :            : {
+<span class="lineNum">     300 </span>                :            :     using std::pair;
+<span class="lineNum">     301 </span>                :            :     using std::swap;
+<span class="lineNum">     302 </span>                :            :     std::tr1::uint_fast32_t z;
+<span class="lineNum">     303 </span>                :<span class="lineCov">          1 :     in &gt;&gt; z;</span>
+<span class="lineNum">     304 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :     while(z--) {</span>
+<span class="lineNum">     305 </span>                :<span class="lineCov">          1 :         in &gt;&gt; n &gt;&gt; m;</span>
+<span class="lineNum">     306 </span>        [<span class="branchCov" title="Branch 0 was taken 2500 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       2501 :         for(size_t i = 1; i &lt;= n; ++i) {</span>
+<span class="lineNum">     307 </span>                :<span class="lineCov">       2500 :             H[i][0] = H[i][m + 1] = std::numeric_limits&lt; uint32_t &gt;::max();</span>
+<span class="lineNum">     308 </span>                :            :         }
+<span class="lineNum">     309 </span>        [<span class="branchCov" title="Branch 0 was taken 2500 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       2501 :         for(size_t i = 1; i &lt;= m; ++i) {</span>
+<span class="lineNum">     310 </span>                :<span class="lineCov">       2500 :             H[0][i] = H[n + 1][i] = std::numeric_limits&lt; uint32_t &gt;::max();</span>
+<span class="lineNum">     311 </span>                :            :         }
+<span class="lineNum">     312 </span>        [<span class="branchCov" title="Branch 0 was taken 2500 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       2501 :         for(size_t i = 1; i &lt;= n; ++i) {</span>
+<span class="lineNum">     313 </span>        [<span class="branchCov" title="Branch 0 was taken 6250000 times"> + </span><span class="branchCov" title="Branch 1 was taken 2500 times"> + </span>]:<span class="lineCov">    6252500 :             for(size_t j = 1; j &lt;= m; ++j) {</span>
+<span class="lineNum">     314 </span>                :<span class="lineCov">    6250000 :                 in &gt;&gt; H[i][j];</span>
+<span class="lineNum">     315 </span>                :            :             }
+<span class="lineNum">     316 </span>                :            :         }
+<span class="lineNum">     317 </span>        [<span class="branchCov" title="Branch 0 was taken 2500 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       2501 :         for(size_t i = 1; i &lt;= n; ++i) {</span>
+<span class="lineNum">     318 </span>        [<span class="branchCov" title="Branch 0 was taken 6250000 times"> + </span><span class="branchCov" title="Branch 1 was taken 2500 times"> + </span>]:<span class="lineCov">    6252500 :             for(size_t j = 1; j &lt;= m; ++j) {</span>
+<span class="lineNum">     319 </span>                :<span class="lineCov">    6250000 :                 visited[i][j] = false;</span>
+<span class="lineNum">     320 </span>                :            :             }
+<span class="lineNum">     321 </span>                :            :         }
+<span class="lineNum">     322 </span>                :<span class="lineCov">          1 :         maxSolution = 0;</span>
+<span class="lineNum">     323 </span>                :<span class="lineCov">          1 :         in &gt;&gt; k &gt;&gt; l &gt;&gt; x &gt;&gt; y;</span>
+<span class="lineNum">     324 </span>                :<span class="lineCov">          1 :         Heap&lt;std::pair&lt;uint16_t, uint16_t&gt;, Comparator&gt; heap((n+2)*(n+2));</span>
+<span class="lineNum">     325 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :         heap.push(std::pair&lt;uint16_t, uint16_t&gt;(k, l));</span>
+<span class="lineNum">     326 </span>                :<span class="lineCov">          1 :         visited[k][l]=true;</span>
+<span class="lineNum">     327 </span>        [<span class="branchCov" title="Branch 1 was taken 4551000 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">    4551000 :         while(!heap.isEmpty()) {</span>
+<span class="lineNum">     328 </span>        [<span class="branchCov" title="Branch 0 was taken 4551000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    4551000 :             std::pair&lt;uint16_t, uint16_t&gt; coord = heap.pop();</span>
+<span class="lineNum">     329 </span>                :<span class="lineCov">    4551000 :             maxSolution = std::max(maxSolution, H[coord.first][coord.second]);</span>
+<span class="lineNum">     330 </span>[<span class="branchCov" title="Branch 0 was taken 1812 times"> + </span><span class="branchCov" title="Branch 1 was taken 4549188 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchCov" title="Branch 3 was taken 1811 times"> + </span>]:<span class="lineCov">    4551000 :             if(coord.first == x &amp;&amp; coord.second == y) {</span>
+<span class="lineNum">     331 </span>                :<span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">     332 </span>                :            :             }
+<span class="lineNum">     333 </span>        [<span class="branchCov" title="Branch 0 was taken 1556665 times"> + </span><span class="branchCov" title="Branch 1 was taken 2994334 times"> + </span>]:<span class="lineCov">    4550999 :             if(!visited[coord.first - 1][coord.second]) {</span>
+<span class="lineNum">     334 </span>[<span class="branchCov" title="Branch 0 was taken 1556665 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1556665 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">    1556665 :                 heap.push(std::make_pair(coord.first - 1, coord.second));</span>
+<span class="lineNum">     335 </span>                :<span class="lineCov">    1556665 :                 visited[coord.first-1][coord.second]=true;</span>
+<span class="lineNum">     336 </span>                :            :             }
+<span class="lineNum">     337 </span>        [<span class="branchCov" title="Branch 0 was taken 1545529 times"> + </span><span class="branchCov" title="Branch 1 was taken 3005470 times"> + </span>]:<span class="lineCov">    4550999 :             if(!visited[coord.first + 1][coord.second]) {</span>
+<span class="lineNum">     338 </span>[<span class="branchCov" title="Branch 0 was taken 1545529 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1545529 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">    1545529 :                 heap.push(std::make_pair(coord.first + 1, coord.second));</span>
+<span class="lineNum">     339 </span>                :<span class="lineCov">    1545529 :                 visited[coord.first+1][coord.second]=true;</span>
+<span class="lineNum">     340 </span>                :            :             }
+<span class="lineNum">     341 </span>        [<span class="branchCov" title="Branch 0 was taken 1557339 times"> + </span><span class="branchCov" title="Branch 1 was taken 2993660 times"> + </span>]:<span class="lineCov">    4550999 :             if(!visited[coord.first][coord.second - 1]) {</span>
+<span class="lineNum">     342 </span>[<span class="branchCov" title="Branch 0 was taken 1557339 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1557339 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">    1557339 :                 heap.push(std::make_pair(coord.first, coord.second - 1));</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">    1557339 :                 visited[coord.first][coord.second-1]=true;</span>
+<span class="lineNum">     344 </span>                :            :             }
+<span class="lineNum">     345 </span>        [<span class="branchCov" title="Branch 0 was taken 1545384 times"> + </span><span class="branchCov" title="Branch 1 was taken 3005615 times"> + </span>]:<span class="lineCov">    4550999 :             if(!visited[coord.first][coord.second + 1]) {</span>
+<span class="lineNum">     346 </span>[<span class="branchCov" title="Branch 0 was taken 1545384 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 4 was taken 1545384 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]:<span class="lineCov">    1545384 :                 heap.push(std::make_pair(coord.first, coord.second + 1));</span>
+<span class="lineNum">     347 </span>                :<span class="lineCov">    1545384 :                 visited[coord.first][coord.second+1]=true;</span>
+<span class="lineNum">     348 </span>                :            :             }
+<span class="lineNum">     349 </span>                :            :         }
+<span class="lineNum">     350 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         out &lt;&lt; maxSolution &lt;&lt; '\n';</span>
+<span class="lineNum">     351 </span>                :<span class="lineCov">          1 :     }</span>
+<span class="lineNum">     352 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     353 </span>                :            : 
+<a name="354"><span class="lineNum">     354 </span>                :            : } // namespace</a>
+<span class="lineNum">     355 </span>                :            : 
+<span class="lineNum">     356 </span>                :<span class="lineCov">          1 : int main(int argc, char **argv)</span>
+<span class="lineNum">     357 </span>                :            : {
+<span class="lineNum">     358 </span>                :<span class="lineCov">          1 :     std::ios_base::sync_with_stdio(false);</span>
+<span class="lineNum">     359 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     360 </span>                :            :     init(argc, argv);
+<span class="lineNum">     361 </span>                :            : #else
+<span class="lineNum">     362 </span>                :            :     (void)argc;
+<span class="lineNum">     363 </span>                :            :     (void)argv;
+<span class="lineNum">     364 </span>                :            : #endif
+<a name="365"><span class="lineNum">     365 </span>                :<span class="lineCov">          1 :     solution();</span></a>
+<span class="lineNum">     366 </span>                :<span class="lineCov">          1 :     return 0;</span>
+<span class="lineNum">     367 </span>[<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          3 : }</span>
+<span class="lineNum">     368 </span>                :            : 
+<span class="lineNum">     369 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
