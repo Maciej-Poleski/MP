@@ -1,0 +1,50 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\title{Zadania domowe. Blok 4. Zestaw 1}
+\author{Maciej Poleski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{listings}
+
+\date{\today}
+
+\pdfinfo{%
+  /Title    (Zadania domowe. Blok 4. Zestaw 1)
+  /Author   (Maciej Poleski)
+  /Creator  (Maciej Poleski)
+  /Producer (Maciej Poleski)
+  /Subject  (MP)
+  /Keywords (MP)
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Najbliżsi}
+Zbiór kluczy znajduje się w tablicy \verb|input[n]|. Dodatkowo dostępna jest zmienna \verb|k|. W przybliżeniu jeżeli tablica \verb|input| była by posortowana to poszukiwalibyśmy elementów o indeksach z przedziału $[\frac{n}{2}-\frac{k}{2};\frac{n}{2}+\frac{k}{2}]$. W przybliżeniu, ponieważ pozycja przedziału zależy od parzystości $n$ i $k$. Możemy więc znaleźć kresy tego przedziału przy użyciu \verb|kthElement| i przefiltrować tablicę wybierając z niej te elementy, których wartość znajduje się w odpowiednim przedziale. Dla niektórych danych wejściowych odpowiedź jest niejednoznaczna, poniższe rozwiązanie wskaże przykładową odpowiedź.
+\begin{alltt}
+template<typename T>
+T* solution()
+\{
+    T* result=new T[k];
+    T* i=result;
+    T left=kthElement(input,n/2-k/2,n);
+    T right=kthElement(input,n/2-k/2+k-1,n);
+    for(T o : input)
+        if(left<=o && o<=right)
+            *i++=o;
+    return result;
+\}
+\end{alltt}
+\verb|T| jest typem elementów w tablicy wejściowej. Wynikiem jest tablica (nieposortowana) zawierająca poszukiwaną odpowiedź.
+
+
+\end{document}
